@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <!-- Page Header (same style as login.html) -->
+  <header>
+    <img src="logo.jpg" alt="LMS Logo" style="width: 100px; height: 100px;">
+    <h1>LMS - Learning Management System</h1>
+  </header>
+  
+  <!-- Simple Navigation -->
+  <div>
+    <nav>
+      <a href="index.html">Homepage</a>
+    </nav>
+  </div>
+  
+  <!-- Main Content -->
+  <main class="signup">
+    <h2>Sign Up</h2>
+    <!-- Signup Form -->
+    <form id="signup-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username"><br>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"><br>
+      
+      <label for="confirm-password">Confirm Password:</label>
+      <input type="password" id="confirm-password" name="confirm-password"><br>
+      
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email"><br>
+      
+      <button type="submit" id="signup-btn">Sign Up</button>
+    </form>
+    
+    <!-- Dynamic Error Box -->
+    <div id="error-box"></div>
+  </main>
+  
+  <!-- Page Footer -->
+  <footer>
+    <p>&copy; 2025 LMS. All rights reserved.</p>
+  </footer>
+  
+  <!-- Validation Script -->
+  <script>
+    document.getElementById("signup-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+      const email = document.getElementById("email").value.trim();
+      const errorBox = document.getElementById("error-box");
+      
+      errorBox.style.display = "none";
+      errorBox.innerHTML = "";
+      
+      let errors = [];
+      
+      // Username: 3-20 chars, must start with a letter, can have letters, numbers, hyphens, underscores
+      const usernameRegex = /^[A-Za-z][A-Za-z0-9_-]{2,19}$/;
+      if(!usernameRegex.test(username)) {
+        errors.push("Username must be 3-20 characters, start with a letter, and contain only letters, numbers, hyphens, or underscores.");
+      }
+      
+      // Password: at least 8 chars, uppercase, lowercase, number, special char, no spaces
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=\+\[\]{}|;:'\",.<>?/`~])[A-Za-z\d!@#$%^&*()\-_=\+\[\]{}|;:'\",.<>?/`~]{8,}$/;
+      if(!passwordRegex.test(password)) {
+        errors.push("Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.");
+      }
+      if(password.indexOf(" ") >= 0) {
+        errors.push("Password cannot contain spaces.");
+      }
+      
+      // Confirm Password
+      if(password !== confirmPassword) {
+        errors.push("Passwords do not match.");
+      }
+      
+      // Email validation: must end with .com, .net, or .io
+      const emailRegex = /^[^\s@]+@[^\s@]+\.(com|net|io)$/;
+      if(!emailRegex.test(email)) {
+        errors.push("Email must be in a valid format (e.g., user@example.com) and end with .com, .net, or .io.");
+      }
+      
+      // Show errors or redirect if valid
+      if(errors.length > 0) {
+        errorBox.style.display = "block";
+        errorBox.innerHTML = errors.join("<br>");
+      } else {
+        alert("Signup successful! Redirecting to login page...");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+</body>
+</html>
